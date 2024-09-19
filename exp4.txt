@@ -1,0 +1,124 @@
+1)
+import urllib.request
+import requests
+import threading
+import json
+import random
+
+def thingspeak_post():
+    threading.Timer(15,thingspeak_post).start()
+    val=random.randint(1,30)
+    URI='https://api.thingspeak.com/update?api_key='
+    KEY='51XF1ZTH8C6MGHTK'#Enter the API Write Key acquired from ThinkSpeak
+    HEADER='&field1={}&field2={}'.format(val,val)
+    NEW_URL=URI+KEY+HEADER
+    print(NEW_URL)
+    data=urllib.request.urlopen(NEW_URL)
+    print(data)
+    
+if __name__=='__main__':
+    thingspeak_post()
+
+2)
+import urllib.request
+import requests
+import threading
+import json
+import random
+from sense_hat import SenseHat
+from time import sleep
+
+sense=SenseHat()
+
+def thingspeak_post():
+    threading.Timer(15,thingspeak_post).start()
+    temp=sense.get_temperature_from_humidity()
+    humid=sense.get_humidity()
+    URI='https://api.thingspeak.com/update?api_key='
+    KEY='51XF1ZTH8C6MGHTK'#Enter the API Write Key acquired from ThinkSpeak
+    HEADER='&field3={}&field4={}'.format(temp,humid)
+    NEW_URL=URI+KEY+HEADER
+    print(NEW_URL)
+    data=urllib.request.urlopen(NEW_URL)
+    print(data)
+    
+if __name__=='__main__':
+    thingspeak_post()
+
+3)
+import time
+from Adafruit_IO import Client,Feed
+from sense_hat import SenseHat
+from time import sleep
+
+sense=SenseHat()
+#delay in btwn sensor reading in seconds
+READ_TIMEOUT=5
+
+#set your adafruit io key
+ADAFRUIT_IO_KEY='aio_PSzu43CMMw9tZLYXO8W9BSUvTgnj'
+
+#set your adafruit io username
+ADAFRUIT_IO_USERNAME='Seenu_04'
+
+#create a instance of the REST client
+aio=Client(ADAFRUIT_IO_USERNAME,ADAFRUIT_IO_KEY)
+
+temperature_feed=aio.feeds('temp')#temp is io feed key created in adafruit
+humidity_feed=aio.feeds('humd')#humd is io feed key created in adafruit
+
+while True:
+    temperature=sense.get_temperature_from_humidity()
+    humidity=sense.get_humidity()
+    if humidity is not None and temperature is not None:
+        print('Temp={0:0.1f}*C Humidity={1:0.1f}%'.format(temperature,humidity))
+        #Send humidity and temperature feeds to adafruit io
+        temperature='%.2f'%(temperature)
+        humidity='%.2f'%(humidity)
+        aio.send(temperature_feed.key,str(temperature))
+        aio.send(humidity_feed.key,str(humidity))
+    else:
+        print('Failed to get temperature and humidity data from sensehat')
+    #timeout to avoid flooding adafruit io
+    time.sleep(READ_TIMEOUT)
+
+4)
+import sys
+from Adafruit_IO import Client,Feed,MQTTClient
+from sense_hat import SenseHat
+
+
+sense=SenseHat()
+
+#set your adafruit io key
+ADAFRUIT_IO_KEY='aio_PSzu43CMMw9tZLYXO8W9BSUvTgnj'
+
+#set your adafruit io username
+ADAFRUIT_IO_USERNAME='Seenu_04'
+
+FEED_ID='payload'#payload' is IO feed Key created in adafruit
+
+def connected(client):
+    print('Connected to Adafruit IO! Listening for {0} changes...'.format(FEED_ID))
+    client.subscribe(FEED_ID)
+
+def disconnected(client):
+    print('Disconnected from Adafruit IO!')
+    sys.exit(1)
+    
+def message(client,feed_id,payload):
+    print('Feed {0} recieved new value:{1}'.format(feed_id,payload))
+    if payload == "1":
+        print("Light ON")
+        sense.show_letter("O")
+    if payload == "0":
+        print("Light OFF")
+        sense.clear()
+
+
+client= MQTTClient(ADAFRUIT_IO_USERNAME,ADAFRUIT_IO_KEY)
+client.on_connect =connected
+client.on_disconnect =disconnected
+client.on_message =message
+client.connect()
+client.loop_blocking()
