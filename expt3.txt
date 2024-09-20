@@ -1,0 +1,86 @@
+from sense_hat import SenseHat
+from time import sleep,time,asctime
+from flask import Flask ,render_template
+
+sense=SenseHat()
+
+temp=round(sense.get_temperature()*1.8+32)
+humidity=round(sense.get_humidity())
+pressure=round(sense.get_pressure())
+message='Temperature is %d F Humidity is %d percent Pressure is %d mbars'%(temp,humidity,pressure)
+#JoyStickPos=2
+
+app=Flask(__name__)
+
+@app.route('/')
+def index():
+    deviceSts = "OFF"
+    sense.show_letter("I")
+    templateData = {'device1' : deviceSts}
+    return render_template('index.html',**templateData)
+
+
+@app.route("/<deviceName>/<action>") 
+def action(deviceName, action):
+    if deviceName == 'd1' and action == 'on':
+        deviceSts = "ON"
+        sense.show_letter("O") 
+    if deviceName == 'd1' and action == 'off':
+        deviceSts = "OFF"
+        sense.show_letter("F") 
+    templateData = {'device1' : deviceSts}
+    return render_template('index.html',**templateData)
+
+@app.route('/off')
+def clear():
+    deviceSts = "OFF"
+    sense.clear() 
+    templateData = {'device1' : deviceSts}
+    return render_template('index.html',**templateData)
+
+
+if __name__ == '__main__':
+    app.run(host='172.17.126.35')
+
+
+
+<!DOCTYPE html>
+
+	<head>
+		<title>Device Control</title>		
+		<link rel = "stylesheet" href = "/static/style.css" />
+	</head>
+
+	<body>
+		<h1>Raspberry Pi Device Control</h1>
+		<h2> Device Status </h2>
+		<h3> Device 1 ==> {{ device1  }}</h3>
+		<br>
+
+		<h2> Commands </h2>
+		<h3>
+			Device Ctrl ==>
+			<a href="/d1/on" class="button">Device 1 ON</a>
+			<a href="/d1/off" class="button">Device 1 OFF</a>
+		</h3>
+	</body>
+
+</html>
+
+  </body>
+</html>
+
+
+
+body{
+	background:navy;
+	color:yellow;
+	font-family:Arial,sans-serif;
+	text-align:center;
+}
+
+h1{
+	border-bottom:1px solid gold;
+	marigin-bottom:40px;
+	padding:10px;
+}
