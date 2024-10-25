@@ -1,0 +1,68 @@
+from PIL import Image,ImageTk,ImageEnhance
+import tkinter as tk
+
+def show_value_1(factor):
+    print('Contrast factor',factor)
+    enhancer=ImageEnhance.Contrast(im1)
+    img=enhancer.enhance(float(factor))
+    photo=ImageTk.PhotoImage(img)
+    I['image']=photo
+    I.photo=photo
+    
+root=tk.Tk()
+root.title('Color Adjustment Demo')
+im1=Image.open("/home/pi/Desktop/test.png")
+photo=ImageTk.PhotoImage(im1)
+I=tk.Label(root,image=photo)
+I.pack()
+I.photo=photo
+w1=(tk.Scale(root,label="Color Factor",from_=0, to =10,resolution=0.2,command=show_value_1,orient=tk.HORIZONTAL))
+w1.pack()
+w1.set(1)
+root.mainloop()
+
+from PIL import Image,ImageTk,ImageEnhance
+import tkinter as tk
+
+def show_value_1(factor):
+    print('Sharpness factor',factor)
+    enhancer=ImageEnhance.Sharpness(im1)
+    img=enhancer.enhance(float(factor))
+    photo=ImageTk.PhotoImage(img)
+    I['image']=photo
+    I.photo=photo
+    
+root=tk.Tk()
+root.title('Contrast Adjustment Demo')
+im1=Image.open("/home/pi/Desktop/test.png")
+photo=ImageTk.PhotoImage(im1)
+I=tk.Label(root,image=photo)
+I.pack()
+I.photo=photo
+w1=(tk.Scale(root,label="Sharpness Factor",from_=0, to =2,resolution=0.2,command=show_value_1,orient=tk.HORIZONTAL))
+w1.pack()
+w1.set(1)
+root.mainloop()
+
+
+from PIL import Image,ImageTk,ImageEnhance
+import tkinter as tk
+
+def show_value_1(num_of_col):
+    print('Number of colors',num_of_col)
+    img=im1.quantize(int(num_of_col))
+    photo=ImageTk.PhotoImage(img)
+    I['image']=photo
+    I.photo=photo
+    
+root=tk.Tk()
+root.title('Color Quantisation Demo')
+im1=Image.open("/home/pi/Desktop/test.png")
+photo=ImageTk.PhotoImage(im1)
+I=tk.Label(root,image=photo)
+I.pack()
+I.photo=photo
+w1=(tk.Scale(root,label="Number of color",from_=4, to =16,resolution=1,command=show_value_1,orient=tk.HORIZONTAL))
+w1.pack()
+w1.set(256)
+root.mainloop()

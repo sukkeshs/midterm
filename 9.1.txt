@@ -1,0 +1,86 @@
+import RPi.GPIO as GPIO
+import time
+ledpin = 36
+GPIO.setwarnings(False)
+GPIO.setmode(GPIO.BOARD)
+GPIO.setup(ledpin, GPIO.OUT)
+while True:
+    GPIO.output(ledpin, True)
+    time.sleep(1)
+    GPIO.output(ledpin,False)
+    time.sleep(1)
+GPIO.cleanup()
+
+
+
+
+import RPi.GPIO as GPIO
+import time
+GPIO.setwarnings(False)
+GPIO.setmode(GPIO.BOARD)
+ledpin = 36
+switch=40
+GPIO.setup(ledpin, GPIO.OUT)
+GPIO.setup(switch,GPIO.IN , pull_up_down=GPIO.PUD_UP)
+while True:
+    status =GPIO.input(switch)
+    if(status):
+        GPIO.output(ledpin,True)
+        print("Button pressed")
+    else:
+        GPIO.output(ledpin,False)
+        print("Button not pressed")
+GPIO.cleanup()
+
+
+
+import RPi.GPIO as GPIO
+import time
+ledpin = 32
+GPIO.setwarnings(False)
+GPIO.setmode(GPIO.BOARD)
+GPIO.setup(ledpin,GPIO.OUT)
+dimmer=GPIO.PWM(ledpin,50)
+dimmer.start(0)
+try:
+    while(True):
+        for i in range(0,100,5):
+            dimmer.ChangeDutyCycle(i)
+            time.sleep(0.2)
+        for i in range(100,0,-5):
+            dimmer.ChangeDutyCycle(i)
+            time.sleep(0.2)
+except KeyboardInterrupt:
+    dimmer.stop()
+    GPIO.cleanup()
+
+
+
+import RPi.GPIO as GPIO
+import time
+
+control=[5,5.5,6,6.5,7,7.5,8,8.5,9,9.5,10]
+servopin=32
+
+GPIO.setmode(GPIO.BOARD)
+GPIO.setup(servopin,GPIO.OUT)
+
+#in servo motor,
+
+servo=GPIO.PWM(servopin,50)
+servo.start(5)
+try:
+    while True:
+        for x in range(11):
+            servo.ChangeDutyCycle(control[x])
+            time.sleep(0.03)
+            print(x)
+        for x in range(9,0,-1):
+            servo.ChangeDutyCycle(control[x])
+            time.sleep(0.03)
+            print(x)
+except KeyboardInterrupt:
+    GPIO.cleanup()
+            
+
+    

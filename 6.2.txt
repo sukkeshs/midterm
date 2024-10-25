@@ -1,0 +1,51 @@
+from PIL import Image,ImageTk
+import tkinter as tk
+def show_value_1(angle):
+    print('Angle:',angle)
+    img=im.rotate(float(angle))
+    photo=ImageTk.PhotoImage(img)
+    I['image']=photo
+    I.photo=photo
+root=tk.Tk()
+root.title("Rotation Demo")
+root.attributes('-fullscreen',False)
+im=Image.open("/home/pi/Desktop/images-of-nature-4.webp")
+photo=ImageTk.PhotoImage(im)
+I=tk.Label(root,image=photo)
+I.pack()
+I.photo=photo
+w1=(tk.Scale(root,label="Angle",from_=0,to=360,resolution=1,command=show_value_1,orient=tk.HORIZONTAL))
+w1.pack()
+root.mainloop()
+
+
+
+from PIL import Image,ImageTk
+import tkinter as tk
+root=tk.Tk()
+root.title("Transpose Demo")
+im=Image.open("/home/pi/Desktop/images-of-nature-4.webp")
+out=im.transpose(Image.ROTATE_360)  
+photo=ImageTk.PhotoImage(out)
+I=tk.Label(root,image=photo)
+I.pack()
+I.photo=photo
+
+
+
+from PIL import Image
+im=Image.open("/home/pi/Desktop/images-of-nature-4.webp")
+face_box=(100,100,250,250)
+face=im.crop(face_box)
+rotated_face=face.transpose(Image.ROTATE_180)
+im.paste(rotated_face,face_box)
+im.show()
+
+
+from PIL import Image
+im=Image.open("/home/pi/Desktop/images-of-nature-4.webp")
+im1=im.copy()
+im1.save("/home/pi/Desktop/images-of-nature-4000.webp")
+
+
+

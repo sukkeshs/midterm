@@ -1,0 +1,82 @@
+from PIL import Image,ImageTk
+import tkinter as tk
+im=Image.open("/home/pi/Desktop/Cascade_-15-617280561.JPG")
+
+print(im.mode)
+print(im.format)
+print(im.size)
+print(im.info)
+print(im.getbands())
+
+root=tk.Tk()
+root.title("Test")
+photo=ImageTk.PhotoImage(im)
+I=tk.Label(root,image=photo)
+I.pack()
+I.photo=photo
+root.mainloop()
+
+
+
+from PIL import Image,ImageTk
+import tkinter as tk
+im=Image.open("/home/pi/Desktop/images-of-nature-4.webp")
+root=tk.Tk()
+root.title("Red Channel Demo")
+r,g,b=im.split()
+photo1=ImageTk.PhotoImage(b)
+I1=tk.Label(root,image=photo1)
+I1.pack()
+photo2=ImageTk.PhotoImage(Image.merge("RGB",(r,g,b)))
+I2=tk.Label(root,image=photo2)
+I2.pack()
+I2.photo=photo2
+root.mainloop()
+
+
+from PIL import Image,ImageTk
+import tkinter as tk
+im1=Image.open("/home/pi/Desktop/images-of-nature-4.webp")
+res1=im1.convert("L")
+root=tk.Tk()
+root.title("Colorspace Conversion Demo")
+photo=ImageTk.PhotoImage(res1)
+I=tk.Label(root,image=photo)
+I.pack()
+I.photo=photo
+root.mainloop()
+
+
+from PIL import Image,ImageTk
+import tkinter as tk
+def show_value_1(size):
+    print('Resize:',size,':',size)
+    img=im.resize(int(size),int(size))
+    photo=ImageTk.PhotoImage(img)
+    I['image']=photo
+    I.photo=photo
+
+root=tk.Tk()
+root.attributes('-fullscreen',False)
+im=Image.open("/home/pi/Desktop/images-of-nature-4.webp")
+photo=ImageTk.PhotoImage(im)
+I=tk.Label(root,image=photo)
+I.pack()
+I.photo=photo
+w1=(tk.Scale(root,label="Resize",from_=128,to=512,resolution=1,command=show_value_1,orient=tk.HORIZONTAL))
+w1.pack()
+root.mainloop()
+
+
+
+
+
+
+
+
+
+
+
+
+
+

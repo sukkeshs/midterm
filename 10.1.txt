@@ -1,0 +1,58 @@
+import picamera
+import time
+picam=picamera.PiCamera(alpha=200)
+picam.start_preview()
+time.sleep(10)
+picam.stop_preview()
+picam.close()
+
+
+from picamera import  PiCamera
+import time
+picam=PiCamera()
+picam.rotation=180
+picam.start_preview(alpha=200)
+time.sleep(5)
+picam.capture('myimage_rotated.png')
+picam.stop_preview()
+picam.close()
+
+
+import  picamera 
+import time
+from picamera import  Color
+picam=picamera.PiCamera()
+picam.start_preview(alpha=200)
+picam.annotate_text='hello from raspi'
+picam.annotate_text_size=60
+picam.annotate_background=Color('blue')
+picam.annotate_foreground=Color('yellow')
+time.sleep(5)
+picam.capture('text_image.png')
+picam.stop_preview()
+picam.close()
+
+import picamera
+import time
+from picamera import Color
+picam=picamera.PiCamera()
+picam.start_preview(alpha=200)
+for i in range(100):
+    picam.annotate_text='brightness: %s'%i
+    picam.sharpness=i
+    time.sleep(0.1)
+picam.stop_preview()
+picam.close()
+
+
+import picamera
+import time
+from picamera import Color
+picam=picamera.PiCamera()
+picam.start_preview(alpha=200)
+for effect in picam.IMAGE_EFFECTS:
+    picam.image_effect=effect
+    picam.annotate_text='Effect : %s' %effect
+    time.sleep(5)
+picam.stop_preview()
+picam.close()

@@ -1,0 +1,30 @@
+import picamera
+from tkinter import *
+import tkinter as tk
+import time
+from picamera import Color
+picam=picamera.PiCamera()
+import math
+def show_value_1(i):
+    picam.start_preview(alpha=200)
+    picam.annotate_text='sharpness: %s'%i
+    picam.sharpness=int(i)
+    time.sleep(1)
+    picam.stop_preview()
+def capture_camera():
+    picam.start_preview(alpha=200)
+    time.sleep(2)
+    picam.capture('my_capture.png')
+
+root=tk.Tk()
+I=tk.Label(root)
+w=(tk.Scale(root,label="Sharpness Factor",from_=0, to =50,resolution=1,command=show_value_1,orient=tk.VERTICAL))
+w.pack(side=tk.LEFT)
+button1 = Button(root, text="capture Camera", command=capture_camera) 
+w.set(1)
+I.pack()
+button1.pack()
+root.mainloop()
+picam.stop_preview()
+picam.close()
+

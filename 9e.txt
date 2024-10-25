@@ -1,0 +1,37 @@
+import RPi.GPIO as GPIO
+import time
+
+control=[5,5.5,6,6.5,7,7.5,8,8.5,9,9.5,10]
+servopin=32
+switch1=37
+switch2=38
+switch3=36
+
+GPIO.setmode(GPIO.BOARD)
+GPIO.setup(servopin,GPIO.OUT)
+GPIO.setup(switch1,GPIO.IN , pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(switch2,GPIO.IN , pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(switch3,GPIO.IN , pull_up_down=GPIO.PUD_DOWN)
+
+
+servo=GPIO.PWM(servopin,50)
+servo.start(5)
+try:
+    while True:
+        status1=GPIO.input(switch1)
+        status2=GPIO.input(switch2)
+        status3=GPIO.input(switch3)
+        if(status1):
+            servo.ChangeDutyCycle(5)
+            time.sleep(0.03)
+        if(status2):
+            servo.ChangeDutyCycle(7.5)
+            time.sleep(0.03)
+        if(status3):
+            servo.ChangeDutyCycle(10)
+            time.sleep(0.03)
+        
+except KeyboardInterrupt:
+    GPIO.cleanup()
+            
+

@@ -1,0 +1,60 @@
+from PIL import Image,ImageTk,ImageFilter
+import tkinter as tk
+
+def show_value_1(blur_radius):
+    print('Gaussian Blur Radius',blur_radius)
+    custom_filter=ImageFilter.GaussianBlur(radius=float(blur_radius))
+    img=im1.filter(custom_filter)
+    photo=ImageTk.PhotoImage(img)
+    I['image']=photo
+    I.photo=photo
+    
+root=tk.Tk()
+root.title('Gaussian Blur Filter Demo')
+im1=Image.open("/home/pi/Desktop/test.png")
+photo=ImageTk.PhotoImage(im1)
+I=tk.Label(root,image=photo)
+I.pack()
+I.photo=photo
+w1=(tk.Scale(root,label="Blur Radius",from_=0, to =10,resolution=0.2,command=show_value_1,orient=tk.HORIZONTAL))
+w1.pack()
+root.mainloop()
+
+
+from PIL import Image,ImageTk,ImageFilter
+import tkinter as tk
+    
+root=tk.Tk()
+root.title('Convolution Kernel Demo')
+im1=Image.open("/home/pi/Desktop/test.png")
+custom_filter=ImageFilter.Kernel((5,5),[1,1,1,1,-4,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,-10])
+img=im1.filter(custom_filter)
+photo=ImageTk.PhotoImage(img)
+I=tk.Label(root,image=photo)
+I.pack()
+I.photo=photo
+root.mainloop()
+
+
+from PIL import Image,ImageTk,ImageEnhance
+import tkinter as tk
+
+def show_value_1(factor):
+    print('Color factor',factor)
+    enhancer=ImageEnhance.Color(im1)
+    img=enhancer.enhance(float(factor))
+    photo=ImageTk.PhotoImage(img)
+    I['image']=photo
+    I.photo=photo
+    
+root=tk.Tk()
+root.title('Color Adjustment Demo')
+im1=Image.open("/home/pi/Desktop/test.png")
+photo=ImageTk.PhotoImage(im1)
+I=tk.Label(root,image=photo)
+I.pack()
+I.photo=photo
+w1=(tk.Scale(root,label="Color Factor",from_=0, to =10,resolution=0.2,command=show_value_1,orient=tk.HORIZONTAL))
+w1.pack()
+w1.set(1)
+root.mainloop()

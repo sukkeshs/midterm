@@ -1,0 +1,13 @@
+from PIL import Image,ImageOps
+im1=Image.open("/home/pi/Desktop/test.png")
+print(im1.histogram())
+print(len(im1.histogram()))
+r,g,b=im1.split()
+print(len(r.histogram()))
+print(len(g.histogram()))
+print(len(b.histogram()))
+im2=ImageOps.equalize(im1)
+print(im2.histogram())
+im2.show()
+
+
